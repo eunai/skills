@@ -63,6 +63,7 @@ Forbidden patterns: (default list from Phase 5 section below)
 - Resolved private repo URL
 - Paths under `docs/internal/`
 - `scripts/publish.ps1`
+- `scripts/clean-publish-clones.ps1`
 - `.cursor/`
 - `AGENTS.md`
 
@@ -98,7 +99,7 @@ Single ordered source list; derive `$WhitelistPaths`, `$PathRenames`, `$Forbidde
 **Default `$ForbiddenPatterns`:**
 
 ```text
-^\.cursor/
+^\.cursor/(?!skills/)
 ^\.claude/
 ^AGENTS\.md$
 ^docs/internal/
@@ -109,9 +110,11 @@ Single ordered source list; derive `$WhitelistPaths`, `$PathRenames`, `$Forbidde
 \.key$
 ^\.coverage$
 ^scripts/publish\.ps1$
+^scripts/clean-publish-clones\.ps1$
+^temp_prompt
 ```
 
-When **`also write bash publisher`:** append `^scripts/publish\.sh$` and include both publish scripts in forbidden (defense-in-depth).
+Use `^\.cursor/` instead of `(?!skills/)` only when the repo does **not** publish `.cursor/skills/` packs. When **`also write bash publisher`:** append `^scripts/publish\.sh$` and include both PowerShell publisher scripts plus `publish.sh` in forbidden (defense-in-depth).
 
 **`$PathRenames` must always include:**
 
@@ -131,64 +134,87 @@ When **`also write bash publisher`:** append `^scripts/publish\.sh$` and include
 
 ---
 
-## `scripts/publish.ps1` — required shape
+## Phase 5 — Publisher PowerShell (`scripts/publish.ps1`)
 
-Agent fills `<DETECTED_PUBLIC_URL>`, `<DEFAULT_BRANCH>`, arrays, and helper bodies. Do not leave `<REPLACE_ME>` for remote.
+Agent fills `<DETECTED_PUBLIC_URL>`, `<DEFAULT_BRANCH>`, `$WhitelistPaths`, `$PathRenames`, `$ForbiddenPatterns`, and helper bodies. **Never** leave `<REPLACE_ME>` for remote.
+
+**Temp clone path (must match cleanup script):** after `Get-RepoRoot`, set  
+`$repoLeaf = (Split-Path $RepoRoot -Leaf)`  
+`$work = Join-Path $env:TEMP ($repoLeaf + '-publish-' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds())`  
+The sibling **`scripts/clean-publish-clones.ps1`** must default its filter to **`$repoLeaf + '-publish-*'`** (same stem).
+
+**Required tail behavior (after filter-repo, forbidden scan, file list print):**
+
+1. **`$ErrorActionPreference = 'Stop'`** stays in effect for the whole script.
+2. **`-Push` block:** `Push-Location $work`, then **idempotent `public` remote** — **never** `git remote remove public` unconditionally and **never** rely on `2>$null` alone to hide git stderr (PowerShell still surfaces native stderr as error). **Required:**
 
 ```powershell
-#Requires -Version 5.1
-<#
-.NOTES
-Repository: <private_git_url> -> <public_git_url>
-#>
-[CmdletBinding()]
-param(
-    [switch]$Push,
-    [switch]$PushTags,
-    [string]$PublicRemote = "<DETECTED_PUBLIC_URL>",
-    [string]$Branch = "<DEFAULT_BRANCH>",
-    [switch]$SkipDocCheck
-)
-Set-StrictMode -Version 3.0
-$ErrorActionPreference = "Stop"
-
-# $WhitelistPaths = @(...)
-# $PathRenames = @('README.public.md:README.md', ...)
-# $ForbiddenPatterns = @('^\.cursor/', ...)
-
-# Find-Tool helper: resolve git, git-filter-repo; optional gitleaks (warn if absent).
-# Throw if -PushTags without -Push.
-# Throw if working tree dirty.
-# Throw if [string]::IsNullOrWhiteSpace($PublicRemote).
-
-# Clone --no-local to $env:TEMP\<repo>-publish-<timestamp>
-# Run git filter-repo with --path / --path-rename from lists
-# Forbidden scan: git ls-tree -r --name-only HEAD after filter-repo, BEFORE push — abort on match
-
-# Soft cross-check (unless -SkipDocCheck): read docs/internal/publish_whitelist_tree.md
-# from PRIVATE working tree; under "## Script anchor" (or exact heading used in doc),
-# parse fenced blocks / table rows; compare to in-script lists.
-# Divergence: Write-Warning each missing/extra; do not abort.
-# Match: "==> Whitelist doc and script agree (N entries)".
-# Parse failure: warn; suggest re-run skill.
-
-# gitleaks: run if present; else Write-Warning skip
-
-# Print: "Files that would be published", "Target remote", "Target branch", "Mode"
-# -Push: git remote add public; git push --force public HEAD:$Branch
-# -Push -PushTags: also git push --force public --tags
+if ($Push) {
+    Push-Location $work
+    try {
+        $remotes = @(& $git remote 2>&1 | ForEach-Object { $_.ToString().Trim() } | Where-Object { $_ })
+        if ('public' -in $remotes) {
+            & $git remote remove public
+            if ($LASTEXITCODE -ne 0) { throw "git remote remove public failed." }
+        }
+        & $git remote add public $PublicRemote
+        if ($LASTEXITCODE -ne 0) { throw "git remote add public failed." }
+        & $git push --force public "HEAD:refs/heads/$Branch"
+        if ($LASTEXITCODE -ne 0) { throw "git push failed." }
+        if ($PushTags) {
+            & $git push --force public --tags
+            if ($LASTEXITCODE -ne 0) { throw "git push --tags failed." }
+        }
+    }
+    finally {
+        Pop-Location
+    }
+    Write-Host "Push complete."
+    try {
+        Remove-Item -Recurse -Force -LiteralPath $work
+        Write-Host ('Done. Temp clone removed: ' + $work)
+    }
+    catch {
+        Write-Warning ('Failed to remove temp clone at ' + $work + ': ' + $_.Exception.Message + ' - delete manually.')
+    }
+}
+else {
+    Write-Host ('Done. Temp clone left at ' + $work + ' - delete manually if desired.')
+}
 ```
 
-**Behavior notes:**
+**Why:** `git filter-repo` removes `origin` from the temp clone; **`public`** does not exist until **`git remote add`**. A blind **`git remote remove public`** errors **No such remote: 'public'**; under **`Stop`** that aborts the script.
 
-- Dry-run is default (no `-Push` = no push).
-- Cross-check is **on** unless `-SkipDocCheck` (noisy skipped line).
+**Rest of script (unchanged expectations):** `#Requires -Version 5.1`, `Set-StrictMode -Version 3.0`, `Assert-CleanWorkingTree`, `Find-GitExe`, `Find-FilterRepo`, `Invoke-FilterRepo`, `Test-ForbiddenPaths`, `Invoke-WhitelistDocCrossCheck` reading **private** `docs/internal/publish_whitelist_tree.md`, optional gitleaks, throw if `-PushTags` without `-Push`, clone with `--no-local`, forbidden scan **before** push.
+
+**Remote naming:** **`public`** is only the **temporary clone** remote name pointing at **`$PublicRemote`** (e.g. `https://github.com/org/repo.git`). The GitHub **repo slug** is not the git remote name.
+
+---
+
+## Phase 5 — `scripts/clean-publish-clones.ps1` (required sibling)
+
+Emit alongside **`publish.ps1`** unless the user opted out with **`no cleanup script`** at run start. Match **skills-dev** behavior: `#Requires -Version 5.1`, **`Set-StrictMode -Version 3.0`**, **`$ErrorActionPreference = 'Stop'`**, **dry-run by default**, **`-Force`** performs deletes, **`.git` subdirectory required** on each candidate, **`-TempRoot`** defaults to **`$env:TEMP`**, filter directories whose names match the same **`<repoLeaf>-publish-*`** pattern as **`publish.ps1`** (expose **`-ClonePattern`** defaulting to `"$repoLeaf-publish-*"` where `$repoLeaf` is filled at generation time to match **`publish.ps1`**). List size/age before delete; **`exit 1`** if any delete fails under `-Force`. Include comment-based help with `.EXAMPLE` lines using **`powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\clean-publish-clones.ps1`**.
+
+**Private ASCII tree (`publish_whitelist_tree.md`):** under private-only scripts, show both:
+
+```text
+->   scripts/publish.ps1
+->   scripts/clean-publish-clones.ps1
+```
+
+---
+
+## `scripts/publish.ps1` — structural checklist (quick)
+
+- `Find-Tool` / helpers, `git clone --no-local`, `git filter-repo`, post-filter forbidden scan, cross-check, gitleaks optional.
+- Print **Mode**, **Target remote**, **Target branch**, **Files that would be published**.
+- Dry-run default; **`-Push`** / **`-PushTags`** as in PowerShell block above.
 
 ---
 
 ## `scripts/publish.sh` (optional override)
 
-Same lists, renames, forbidden patterns, dirty-tree check, temp clone, `git filter-repo`, post-filter forbidden scan, optional gitleaks, dry-run default, `-Push` / `-PushTags` semantics aligned with PowerShell. Add both script paths to `$ForbiddenPatterns` when this file exists.
+Same lists, renames, forbidden patterns, dirty-tree check, temp clone, `git filter-repo`, post-filter forbidden scan, optional gitleaks, dry-run default, `-Push` / `-PushTags` semantics aligned with PowerShell (including **idempotent `public` remote** and **post-success temp clone removal**). Add **`^scripts/publish\.ps1$`**, **`^scripts/clean-publish-clones\.ps1$`**, and **`^scripts/publish\.sh$`** to `$ForbiddenPatterns` when this file exists.
 
 ---
 
@@ -197,7 +223,7 @@ Same lists, renames, forbidden patterns, dirty-tree check, temp clone, `git filt
 1. Title + purpose paragraph.
 2. Source-of-truth note: `scripts/publish.ps1` holds `$WhitelistPaths` / `$PathRenames` / `$ForbiddenPatterns`; this doc is the maintainer-facing ASCII map.
 3. Legend: `==>` PUBLIC | `->` PRIVATE | `=>` rename | `--` optional.
-4. Private repository tree (ASCII; expand publish-relevant paths).
+4. Private repository tree (ASCII; expand publish-relevant paths). **Must** include **`->`** lines for **`scripts/publish.ps1`** and **`scripts/clean-publish-clones.ps1`** (private-only; defense-in-depth matches `$ForbiddenPatterns`).
 5. After-filter public tree shape (ASCII).
 6. **`## Script anchor`** — section title must contain the exact substring **`Script anchor`** and stay stable (**DO NOT RENAME**). Cross-check parser locks onto this heading; content may live in fenced blocks per script implementation. Mapping table rows:
    - `$WhitelistPaths` → `==> PUBLIC` rows
@@ -211,7 +237,7 @@ Same lists, renames, forbidden patterns, dirty-tree check, temp clone, `git filt
 
 - [ ] After editing scripts/publish.ps1, refresh ASCII trees + script anchor mapping table + dependency licenses.
 - [ ] After editing this doc, verify the script's $WhitelistPaths / $PathRenames / $ForbiddenPatterns still match.
-- [ ] When in doubt, run `pwsh -File scripts/publish.ps1` (dry run).
+- [ ] When in doubt, run a dry run: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\publish.ps1` (or `pwsh -File scripts/publish.ps1` if `pwsh` is on PATH). Prune old temp clones with `scripts\clean-publish-clones.ps1` (dry-run lists; `-Force` deletes).
 ```
 
 When **bash publisher** exists, add:
@@ -234,6 +260,9 @@ pwsh not found. Install: brew install --cask powershell / apt install powershell
 **Commands to print on skip or in summary:**
 
 ```text
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\publish.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\publish.ps1 -Push
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\publish.ps1 -Push -PushTags
 pwsh -File scripts/publish.ps1
 pwsh -File scripts/publish.ps1 -Push
 pwsh -File scripts/publish.ps1 -Push -PushTags
