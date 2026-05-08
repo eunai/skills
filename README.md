@@ -41,6 +41,7 @@ One-line capability blurbs are the first sentence of each pack's YAML `descripti
 
 ### Skill authoring
 
+* **revise-prompt** — Restructures a draft into a structured, agent-readable prompt with a stable core scaffold and optional sections, then delivers it in one copy-paste code fence plus a short change summary.
 * **write-a-skill** — Guides creation of Cursor Agent Skills under `.cursor/skills/` with proper structure, progressive disclosure, and bundled resources.
 
 ### Agent output style
