@@ -30,13 +30,44 @@ If the repo also contains `docs/public/`, do not duplicate these artifacts into 
 - Allowed statuses: `not started`, `in progress`, `done`, `blocked`, `cancelled`.
 - Slice ordering: each slice should be landable in one PR with tests green and the app/build still runnable.
 
+### Mermaid roadmap (canonical style)
+
+Use this layout **every time** `project_status.md` includes a roadmap diagram—no alternate graph types or palettes.
+
+**Graph and flow**
+
+- `flowchart LR` only.
+- List **every** slice/decision/milestone/release node explicitly (one declaration per row that appears in the diagram).
+- **Edges**: express the intended PR/sequence order; break long spine chains across multiple edge lines like the reference pattern below (readable `LR`, not one giant arrow list).
+
+**Node syntax**
+
+| Kind | Syntax | Classes |
+|---|---|---|
+| Slice `Sn` | `Sn["Sn <short title>"]` | Append `:::done` iff slice table row is **`done`**; omit a class suffix for any other status (including **`cancelled`**—keep the `(cancelled)` hint in the label text if it must stay visible). |
+| Decision `Dn` | `Dn{"Dn <blocking question?>"}` | Append `:::done` iff decision row is **`done`** / resolved; omit while **`blocked`** or unresolved. |
+| Milestone `Mn` | `Mn(("<human label e.g. First usable core §10.1">))` | Append `:::done` when milestone row is **`done`**; otherwise omit class suffix while pending/in progress. |
+| Release / version anchor (optional) | `V1(("v1 complete")):::milestone` — adjust id/label when multiple gates exist | Keep `:::milestone` for the horizon-style gate (matches the house style). Omit the node entirely if unused. |
+
+**Styling**
+
+Include **exactly** these class definitions after nodes/edges:
+
+```text
+classDef done fill:#1f6f3a,color:#fff,stroke:#0f3,stroke-width:1px;
+classDef milestone fill:#264653,color:#fff,stroke:#a0c8d8,stroke-width:1px;
+```
+
+Do not add other `classDef` lines unless the team explicitly expands the convention.
+
 ### Mermaid synchronization rules
 
 When updating `project_status.md`:
 
-- Every slice row in the slice table must have a matching Mermaid node.
-- Mermaid `done` class must match the slice table’s `done` rows (and optionally milestone completion).
-- Dependencies (edges) should reflect the intended order; keep them simple and readable.
+- Every slice/decision row that should appear in the diagram needs a matching Mermaid node (IDs stay stable (`S7` stays `S7`)).
+- **`:::done`** on a node matches table rows marked **`done`**; missing class suffix implies not done yet.
+- **Milestones/release nodes** mirror their table wording; colors always follow **Mermaid roadmap (canonical style)** above.
+- **Parallel tracks**: keep `LR` layout but fan edges explicitly—never silently merge unrelated slices without an edge rationale.
 
 ### Slice report creation rule
 
@@ -61,6 +92,10 @@ If a SHA is already known and stable in the repo history, it may be included in 
 
 #### `project_status.md` template
 
+Use three snippets so fences never nest incorrectly.
+
+**(1) Top matter through the diagram heading**
+
 ```markdown
 # Project — Project Status
 
@@ -68,27 +103,37 @@ Rolling next-implementation view expressed as thin vertical slices. This file tr
 
 ## Implementation slices
 
+```
+
+**(2) Mermaid block — adapt ids, labels, and edges only; keep grammar and `classDef` lines fixed**
+
 ```mermaid
 flowchart LR
   S1["S1 <slice title>"]
-  S2["S2 <slice title>"]
+  S2["S2 <slice title>"]:::done
   D1{"D1 <decision?>"}
-  M1(("<milestone>"))
+  M1(("First usable core")):::done
+  S3["S3 <next slice title>"]
 
-  S1 --> S2 --> M1
+  S1 --> S2 --> D1
+  D1 --> M1 --> S3
 
   classDef done fill:#1f6f3a,color:#fff,stroke:#0f3,stroke-width:1px;
   classDef milestone fill:#264653,color:#fff,stroke:#a0c8d8,stroke-width:1px;
 ```
+
+**(3) Tables + housekeeping**
+
+```markdown
 
 ## Slice table
 
 | Slice | Status | Description |
 |---|---|---|
 | S1 — <title> | not started | <scope>. Acceptance signal: <files/tests that prove done>. |
-| S2 — <title> | not started | <scope>. Acceptance signal: <files/tests that prove done>. |
-| D1 — <decision> | blocked | <what’s blocked + what answer is needed>. |
-| **M1 — <milestone>** | not started | Aggregate milestone definition (what “done” means). |
+| S2 — <title> | done | … |
+| D1 — <decision> | blocked | … |
+| **M1 — <milestone>** | done | … |
 
 ## Decision log
 
@@ -100,6 +145,7 @@ flowchart LR
 - Keep slice ids stable; new work gets a new id (S<N+1>).
 - If a slice is dropped, mark it `cancelled` rather than deleting it.
 - Diamonds only for true blockers; record resolutions in the decision log.
+- After every slice table edit, refactor the diagram so statuses/classes and edge order stay aligned with **Mermaid roadmap (canonical style)**.
 ```
 
 #### Slice report template
