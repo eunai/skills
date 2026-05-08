@@ -20,3 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **revise-prompt**: grill-first vs immediate-revise decision; six-part prompt
   scaffold and optional sections; reply format includes an optional one-line Y/N
   to continue with the revised prompt.
+- **project-status-slice-report**: roadmap Mermaid diagrams follow a fixed
+  `flowchart LR` house style (node shapes, status classes, colors, edge layout);
+  `project_status.md` template fences no longer nest invalid Markdown blocks.
