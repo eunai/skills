@@ -12,3 +12,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial public mirror of Cursor agent skills.
+- Public README: Quick start (`/setup-eunai-skills` + manual fallback), grouped **Reference** catalog, Acknowledgements, and Changelog pointer.
