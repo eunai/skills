@@ -1,11 +1,11 @@
 ---
 name: setup-eunai-skills
-description: Bootstraps the eunai skill set into a target Cursor repo by installing the canonical write-a-skill helper (eunai-first, Pocock fallback with Cursor adaptation), recommending skills based on the target repo's language and layout, then authoring each confirmed skill via /write-a-skill with adaptations. Use when the user says "set up eunai skills", "install eunai skills", "bootstrap eunai skill set", "/setup-eunai-skills", or asks to add the eunai skills pack to a new or existing Cursor repo.
+description: Bootstraps the eunai skill set into a target Cursor repo by installing the canonical write-a-skill helper (eunai-first, Pocock fallback with Cursor adaptation), surfacing the catalog and advisory recommendations, then authoring only the skills the user explicitly selects via /write-a-skill with adaptations. Use when the user says "set up eunai skills", "install eunai skills", "bootstrap eunai skill set", "/setup-eunai-skills", or asks to add the eunai skills pack to a new or existing Cursor repo.
 ---
 
 # Setup Eunai Skills
 
-Bootstrap a Cursor repo with the [eunai/skills](https://github.com/eunai/skills) pack in three consent-gated phases. Idempotent on re-runs; reports every fetch URL before downloading; never silently overwrites existing skills.
+Bootstrap a Cursor repo with the [eunai/skills](https://github.com/eunai/skills) pack in three consent-gated phases. **Phase B installs nothing** and **must not start Phase C** until the user has **explicitly confirmed** the final skill list (by name or explicit multi-select). Idempotent on re-runs; reports every fetch URL before downloading; never silently overwrites existing skills.
 
 If the user specifies a different source URL or target path at the start of this run, use it for this run only.
 
@@ -35,13 +35,14 @@ Fetch order:
    - **Purpose:** layout signals — CLI tool, library, application, monorepo, docs site. Ask the user if ambiguous.
    - **Already installed:** existing `.cursor/skills/<name>/` folders, so recommendations can flag what is already present.
 4. Present two grouped lists with checkbox selection:
-   - **Recommended** — skills that fit the detected language/purpose, one-line reason per skill.
+   - **Recommended** — **advisory only:** skills that fit the detected language/purpose, one-line reason per skill.
    - **All available** — the full eunai catalog for reference, with already-installed packs flagged.
-5. Default selection is the Recommended list. User confirms or adjusts.
+5. **Human-in-the-loop gate:** Start with **no** skills selected for install. The user opts in per skill (or states one explicit bulk choice, e.g. “install all Recommended”). **Do not** fetch catalog skill files or write any skill folders until this confirmed list is received. If intent is ambiguous, stop and ask once instead of assuming.
+6. Phase B is **read-only** for skill installs: list the catalog API and read repo signals only; **no** creates or updates under `.cursor/skills/` for catalog skills (Phase C does that).
 
-## Phase C — Author each confirmed skill
+## Phase C — Author each user-confirmed skill
 
-For each confirmed skill, in order:
+For each skill in the **user-confirmed** Phase B list, in order:
 
 1. Fetch the eunai source from `https://raw.githubusercontent.com/eunai/skills/main/.cursor/skills/<name>/SKILL.md` (and any sibling `REFERENCE.md` or `scripts/`). Report each URL before fetching.
 2. Invoke `/write-a-skill` with the fetched content as the starting template.
@@ -55,7 +56,8 @@ For each confirmed skill, in order:
 - **No silent network calls.** Print every fetch URL before downloading; surface HTTP status codes in the run summary.
 - **No external installer.** No `npx`, `pip`, or package-manager calls. Use only Cursor's HTTP and file tools.
 - **Branch hardcoded to `main`** for both `eunai/skills` and `mattpocock/skills` raw URLs. Override only if the user supplies a branch at run start.
-- **Read-only detection.** Phase B reads target repo files but never modifies anything outside `.cursor/skills/`.
+- **No auto-install from recommendations.** The Recommended list is never the install set unless the user explicitly confirms it (or one explicit bulk instruction).
+- **Read-only Phase B for catalog skills.** Phase B reads the catalog API and target repo for signals only; it does not fetch skill payloads or write catalog skills under `.cursor/skills/`.
 
 ## Authoring discipline
 
@@ -67,7 +69,7 @@ Every skill written in Phase C must follow `.cursor/skills/write-a-skill/SKILL.m
 
 ## Run summary
 
-At the end of every run, print a compact per-phase outcome block: source chosen for Phase A (eunai vs Pocock-fallback) plus whether adaptation was applied; catalog/recommended/confirmed counts for Phase B; per-skill write/skip and footer for Phase C; any failed fetches with status codes.
+At the end of every run, print a compact per-phase outcome block: source chosen for Phase A (eunai vs Pocock-fallback) plus whether adaptation was applied; for Phase B, catalog size, count recommended (advisory), and **confirmed** = count of **user-chosen** skills handed to Phase C (not a default from Recommended); per-skill write/skip and footer for Phase C; any failed fetches with status codes.
 
 ## Next
 
