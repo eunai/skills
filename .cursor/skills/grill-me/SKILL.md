@@ -10,4 +10,4 @@ Interview the user relentlessly about every aspect of the plan until you reach a
 - Ask one question at a time; wait for an answer before the next.
 - If a question can be settled by exploring the workspace (code, config, docs), explore it instead of guessing.
 
-_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT)._
+_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Adapted for Cursor by [eunai/skills](https://github.com/eunai/skills)._

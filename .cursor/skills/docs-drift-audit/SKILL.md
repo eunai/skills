@@ -68,3 +68,5 @@ TODO
 ## Next
 - Use **slice-summary** if remediation should be tracked as a campaign.
 - Use **changelog-discipline** if applied fixes change user-visible behavior.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

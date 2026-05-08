@@ -45,4 +45,4 @@ Example — destructive op:
 >
 > Caveman resume. Verify backup exist first.
 
-_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT)._
+_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Adapted for Cursor by [eunai/skills](https://github.com/eunai/skills)._

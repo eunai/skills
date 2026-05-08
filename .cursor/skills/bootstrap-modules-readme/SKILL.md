@@ -68,3 +68,5 @@ TODO
 ## Next
 - Run **bootstrap-agent-index** so the index links here.
 - Run **bootstrap-agent-playbooks** so topic playbooks reference these boundaries.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

@@ -68,3 +68,5 @@ TODO
 
 ## Next
 - **adr-record** converts a hardened decision from this memo into a permanent ADR.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

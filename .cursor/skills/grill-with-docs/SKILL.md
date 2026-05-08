@@ -80,4 +80,4 @@ Only offer an ADR when all three are true:
 
 If any is missing, skip the ADR. Use the ADR template and rules in [REFERENCE.md](REFERENCE.md).
 
-_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT)._
+_Source: [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). Adapted for Cursor by [eunai/skills](https://github.com/eunai/skills)._

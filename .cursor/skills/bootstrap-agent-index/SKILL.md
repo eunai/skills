@@ -90,3 +90,5 @@ Handle this only after the `agent_index.md` write or merge step:
 - Run **bootstrap-modules-readme** for module and dependency boundaries.
 - Run **bootstrap-agent-playbooks** to create per-topic guides under `agents/`.
 - Run **maintain-recommended-libraries** for the trade-off memo this index links.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

@@ -69,3 +69,5 @@ Superseded by: none
 ## Next
 - **maintain-recommended-libraries** can be the source memo behind an ADR.
 - **vertical-slice-planner** can plan implementation slices for an Accepted ADR.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

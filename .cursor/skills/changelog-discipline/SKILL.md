@@ -56,3 +56,5 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## Next
 - Use **adr-record** for significant decisions referenced from a changelog entry.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

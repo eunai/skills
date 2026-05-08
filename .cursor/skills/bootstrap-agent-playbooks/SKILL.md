@@ -77,3 +77,5 @@ TODO
 ## Next
 - Run **bootstrap-agent-index** so it points at `agents/README.md`.
 - Run **bootstrap-modules-readme** so playbook layer references resolve.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

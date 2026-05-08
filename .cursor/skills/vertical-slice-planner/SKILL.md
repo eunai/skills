@@ -69,3 +69,5 @@ TODO
 ## Next
 - Use **slice-summary** to execute one slice and produce `slice_summary.md`.
 - Use **project-status-doc** so campaign rows appear in the rolling status.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._
