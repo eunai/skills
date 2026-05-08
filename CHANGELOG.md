@@ -14,3 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **revise-prompt** skill: restructure drafts into agent-readable prompts (copy-paste fence + change summary); whitelisted for the public mirror.
 - Initial public mirror of Cursor agent skills.
 - Public README: Quick start (`/setup-eunai-skills` + manual fallback), grouped **Reference** catalog, Acknowledgements, and Changelog pointer.
+
+### Changed
+
+- **revise-prompt**: grill-first vs immediate-revise decision; six-part prompt
+  scaffold and optional sections; reply format includes an optional one-line Y/N
+  to continue with the revised prompt.
