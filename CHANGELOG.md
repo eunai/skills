@@ -23,3 +23,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **project-status-slice-report**: roadmap Mermaid diagrams follow a fixed
   `flowchart LR` house style (node shapes, status classes, colors, edge layout);
   `project_status.md` template fences no longer nest invalid Markdown blocks.
+  Edge source lines cap at four `-->` arrows with bridge-node continuations for
+  long spines (including long `:::done` or cancelled-label runs).

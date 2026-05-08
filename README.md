@@ -30,7 +30,7 @@ One-line capability blurbs are the first sentence of each pack's YAML `descripti
 * **changelog-discipline** — Maintains CHANGELOG.md and optional public changelog stubs using Keep a Changelog and Semantic Versioning.
 * **docs-drift-audit** — Compares repo facts against documentation and emits a structured drift report, read-only by default.
 * **maintain-recommended-libraries** — Creates or updates a decision-oriented recommended_libraries.md memo of library candidates and trade-offs.
-* **project-status-slice-report** — Creates and updates a slice-based `project_status.md` plus per-slice `slice_report/` entries with required verification evidence. Roadmap diagrams use a fixed `flowchart LR` Mermaid house style (see the pack’s `REFERENCE.md`).
+* **project-status-slice-report** — Creates and updates a slice-based `project_status.md` plus per-slice `slice_report/` entries with required verification evidence. Roadmap diagrams use a fixed `flowchart LR` Mermaid house style with edge lines capped at four `-->` per source line and bridge-node continuations (see the pack’s `REFERENCE.md`).
 * **security-review-pass** — Produces dated internal security review reports with severity-tagged findings and tracker checklists.
 * **vertical-slice-planner** — Turns an issue, PRD, or rough idea into thin independently shippable vertical slices in a Markdown plan.
 
