@@ -30,9 +30,8 @@ One-line capability blurbs are the first sentence of each pack's YAML `descripti
 * **changelog-discipline** — Maintains CHANGELOG.md and optional public changelog stubs using Keep a Changelog and Semantic Versioning.
 * **docs-drift-audit** — Compares repo facts against documentation and emits a structured drift report, read-only by default.
 * **maintain-recommended-libraries** — Creates or updates a decision-oriented recommended_libraries.md memo of library candidates and trade-offs.
-* **project-status-doc** — Creates or updates a repo-derived project_status.md as the rolling implementation and next-work view.
+* **project-status-slice-report** — Creates and updates a slice-based `project_status.md` plus per-slice `slice_report/` entries with required verification evidence.
 * **security-review-pass** — Produces dated internal security review reports with severity-tagged findings and tracker checklists.
-* **slice-summary** — Creates internal campaign folders containing canonical slice_summary.md implementation records.
 * **vertical-slice-planner** — Turns an issue, PRD, or rough idea into thin independently shippable vertical slices in a Markdown plan.
 
 ### Design conversation

@@ -5,7 +5,7 @@ description: Turns an issue, PRD, or rough idea into thin independently shippabl
 
 # Vertical Slice Planner
 
-Break an issue, PRD, or rough idea into thin, independently shippable vertical slices. Default output is a Markdown plan file whose slices map to future **slice-summary** campaign folders.
+Break an issue, PRD, or rough idea into thin, independently shippable vertical slices. Default output is a Markdown plan file whose slices map to future per-slice reporting under **project-status-slice-report**.
 
 If the user specifies a different root or file path at the start of this run, use it for this run only.
 
@@ -67,7 +67,7 @@ TODO
 ```
 
 ## Next
-- Use **slice-summary** to execute one slice and produce `slice_summary.md`.
-- Use **project-status-doc** so campaign rows appear in the rolling status.
+- Use **project-status-slice-report** to execute one slice and record verification evidence.
+- Use **project-status-slice-report** to keep the rolling status in sync with shipped slices.
 
 _Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

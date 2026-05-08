@@ -64,7 +64,7 @@ TODO
 ```
 
 ## Next
-- Use **slice-summary** to record remediation campaigns.
+- Use **project-status-slice-report** to record remediation work with verification evidence.
 - Use **adr-record** for cross-cutting security decisions.
 
 _Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

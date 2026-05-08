@@ -85,7 +85,7 @@ Always emit the Prompt I1 per-phase status block: Phase 1, Phase 2, Phase 6, Pha
 
 - Run **bootstrap-agent-index** so drift-watch includes `docs/internal/publish_whitelist_tree.md` <-> `scripts/publish.ps1` (and optionally `clean-publish-clones.ps1` in maintainer docs).
 - Run **changelog-discipline** (dual mode once public stubs exist).
-- Run **project-status-doc** / **slice-summary** if the bootstrap should appear as a campaign.
+- Run **project-status-slice-report** if the bootstrap should appear as a slice with verification evidence.
 - Ongoing: **docs-drift-audit** should treat script <-> whitelist as a paired check in bootstrapped repos.
 
 _Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._
