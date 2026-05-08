@@ -20,7 +20,7 @@ See detailed rules and templates in [REFERENCE.md](REFERENCE.md).
    - Else use `docs/`
 2. Ensure `project_status.md` exists (create from template if missing).
 3. Update the slice table **exactly as directed by the user** (don’t infer status).
-4. Sync the Mermaid diagram to the slice table using the **canonical `flowchart LR` style** (node shapes, `:::done` / `:::milestone`, `classDef` colors, edge layout)—see [REFERENCE.md](REFERENCE.md#mermaid-roadmap-canonical-style).
+4. Sync the Mermaid diagram to the slice table using the **canonical `flowchart LR` style** (node shapes, `:::done` / `:::milestone`, `classDef` colors, [edge line wrapping](REFERENCE.md#edge-line-wrapping))—see [REFERENCE.md](REFERENCE.md#mermaid-roadmap-canonical-style).
 5. If a slice transitioned to `done`, create exactly one slice report entry for it.
 
 ## Workflows
@@ -35,7 +35,7 @@ See detailed rules and templates in [REFERENCE.md](REFERENCE.md).
 
 - Apply only the status edits the user specifies.
 - Never renumber slices; mark dropped slices as `cancelled`.
-- Keep the Mermaid diagram in sync with the slice table: same nodes/status classes and branching order; follow [REFERENCE.md](REFERENCE.md#mermaid-roadmap-canonical-style).
+- Keep the Mermaid diagram in sync with the slice table: same nodes/status classes, branching order, and [edge line wrapping](REFERENCE.md#edge-line-wrapping); follow [REFERENCE.md](REFERENCE.md#mermaid-roadmap-canonical-style).
 
 ### Create a slice report (only when slice becomes `done`)
 

@@ -38,7 +38,28 @@ Use this layout **every time** `project_status.md` includes a roadmap diagram—
 
 - `flowchart LR` only.
 - List **every** slice/decision/milestone/release node explicitly (one declaration per row that appears in the diagram).
-- **Edges**: express the intended PR/sequence order; break long spine chains across multiple edge lines like the reference pattern below (readable `LR`, not one giant arrow list).
+- **Edges**: express the intended PR/sequence order; keep the arrow source readable—never one endless `A --> B --> …` line. Follow **[Edge line wrapping](#edge-line-wrapping)**.
+
+#### Edge line wrapping
+
+- **Arrow budget (hard cap):** each edge source line may contain at most **four** `-->` connectors (so at most **five** node ids on that contiguous segment). Example: `S1 --> S2 --> S3 --> S4 --> S5` is allowed; adding `S6` on the same line is not.
+- **Continuation lines:** start the next line with the **last** node of the previous segment, then keep chaining:
+
+```mermaid
+flowchart LR
+  S1["S1"]:::done
+  S2["S2"]:::done
+  S3["S3"]:::done
+  S4["S4"]:::done
+  S5["S5"]:::done
+  S6["S6"]:::done
+
+  S1 --> S2 --> S3 --> S4 --> S5
+  S5 --> S6
+```
+
+- **Same-status spine runs:** when **five or more** consecutive roadmap-order spine nodes share the same class emphasis—either every node in the run has `:::done`, or none of them do and cancelled work is visible in the label (e.g. `(cancelled)`)—do **not** paste the entire run as a single edge line; split so each line stays within the arrow budget (the pattern above already shows a `:::done` run split after `S5`).
+- **Branches / merges:** each fan-out or join line follows the same cap on its own; never invent bridge nodes—repeat an existing id when continuing a spine.
 
 **Node syntax**
 
@@ -67,7 +88,7 @@ When updating `project_status.md`:
 - Every slice/decision row that should appear in the diagram needs a matching Mermaid node (IDs stay stable (`S7` stays `S7`)).
 - **`:::done`** on a node matches table rows marked **`done`**; missing class suffix implies not done yet.
 - **Milestones/release nodes** mirror their table wording; colors always follow **Mermaid roadmap (canonical style)** above.
-- **Parallel tracks**: keep `LR` layout but fan edges explicitly—never silently merge unrelated slices without an edge rationale.
+- **Parallel tracks**: keep `LR` layout but fan edges explicitly—never silently merge unrelated slices without an edge rationale; each edge line still obeys **[Edge line wrapping](#edge-line-wrapping)**.
 
 ### Slice report creation rule
 
@@ -114,9 +135,13 @@ flowchart LR
   D1{"D1 <decision?>"}
   M1(("First usable core")):::done
   S3["S3 <next slice title>"]
+  S4["S4 <slice title>"]
+  S5["S5 <slice title>"]
+  S6["S6 <slice title>"]
 
   S1 --> S2 --> D1
-  D1 --> M1 --> S3
+  D1 --> M1 --> S3 --> S4 --> S5
+  S5 --> S6
 
   classDef done fill:#1f6f3a,color:#fff,stroke:#0f3,stroke-width:1px;
   classDef milestone fill:#264653,color:#fff,stroke:#a0c8d8,stroke-width:1px;
@@ -134,6 +159,10 @@ flowchart LR
 | S2 — <title> | done | … |
 | D1 — <decision> | blocked | … |
 | **M1 — <milestone>** | done | … |
+| S3 — <title> | not started | … |
+| S4 — <title> | not started | … |
+| S5 — <title> | not started | … |
+| S6 — <title> | not started | … |
 
 ## Decision log
 
@@ -145,7 +174,7 @@ flowchart LR
 - Keep slice ids stable; new work gets a new id (S<N+1>).
 - If a slice is dropped, mark it `cancelled` rather than deleting it.
 - Diamonds only for true blockers; record resolutions in the decision log.
-- After every slice table edit, refactor the diagram so statuses/classes and edge order stay aligned with **Mermaid roadmap (canonical style)**.
+- After every slice table edit, refactor the diagram so statuses/classes, edge order, and **[Edge line wrapping](#edge-line-wrapping)** stay aligned with **Mermaid roadmap (canonical style)**.
 ```
 
 #### Slice report template
