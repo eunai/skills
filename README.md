@@ -1,14 +1,20 @@
-<!-- This file mirrors selected content from the private README/CHANGELOG. Edit the private repo first unless this public stub intentionally diverges. -->
-
 # Agent skills
 
-A small collection of agent skills for documentation maintenance and repo hygiene. Each pack lives under `.agents/skills/<name>/` with a `SKILL.md`. MIT licensed; the collection is inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills).
+A small collection of agent skills for documentation maintenance and repo hygiene. Each pack lives under `.agents/skills/<name>/` with a `SKILL.md`. MIT licensed.
 
 ## Quick start
 
-Copy the skill folder you want from `.agents/skills/` into the same path in your target repo, then ask your agent to use that skill by name.
+Copy the pack you want from `.agents/skills/` into the same path in your target repo, then ask your agent to use that skill by name.
 
-For example, copy `.agents/skills/readme/` to your project when you want repo-specific README maintenance guidance, or copy `.agents/skills/changelog/` when you want changelog ownership rules.
+For example, copy `.agents/skills/readme/` to your project when you want README maintenance guidance, or copy `.agents/skills/changelog/` when you want changelog standards.
+
+## Versioning
+
+This project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html) for
+the published pack collection, starting at `0.1.0` during initial development.
+Minor releases add backward-compatible packs or workflows, patch releases fix or
+clarify existing packs, and future major releases mark incompatible public pack
+behavior or path changes.
 
 ## Reference
 
@@ -16,12 +22,8 @@ One-line capability blurbs come from the first sentence of each pack's YAML `des
 
 ### Documentation maintenance
 
-* **changelog** - Maintains the private and public changelog pair for anipyrenamer.
-* **readme** - Maintains the private and public README pair for anipyrenamer.
-
-## Acknowledgements
-
-This collection is inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT).
+* **changelog** - Maintains changelog documents using Keep a Changelog 1.1.0 and Semantic Versioning.
+* **readme** - Maintains README documents using Make a README and Google README guidance for clear project identity, setup, usage, support, status, documentation links, and license coverage.
 
 ## License
 

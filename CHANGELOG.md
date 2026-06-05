@@ -1,5 +1,3 @@
-<!-- This file mirrors selected public content from the private changelog. Edit the private repo first unless this public stub intentionally diverges. -->
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -9,15 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No unreleased changes yet.
+
+## [0.1.0] - 2026-06-05
+
 ### Added
 
 - Public catalog entries for the `readme` and `changelog` documentation
   maintenance skills.
+- Public Semantic Versioning guidance for the published pack collection.
 
 ### Changed
 
-- Updated the public mirror contract to publish `.agents/skills/` packs instead
-  of the previous Cursor-specific skill portfolio.
+- Updated the public repo contract to publish `.agents/skills/` packs instead
+  of the previous skill portfolio layout.
+- Updated the published `changelog` and `readme` packs to follow general
+  changelog and README standards.
 
 ### Removed
 

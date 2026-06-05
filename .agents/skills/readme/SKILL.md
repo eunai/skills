@@ -1,36 +1,48 @@
 ---
 name: readme
-description: Maintains the private and public README pair for anipyrenamer. Use when editing README.md or README.public.md, or when a change affects install, configuration, quick-start, documentation map, licensing, or public/private publication guidance.
+description: Maintains README documents using Make a README and Google README guidance for clear project identity, setup, usage, support, status, documentation links, and license coverage. Use when editing README.md, README.public.md, package READMEs, quick starts, install instructions, usage examples, documentation maps, or contributor-facing README sections.
 ---
 
-# README Pair
+# README
 
-Maintain `README.md` and `README.public.md` together.
+## Quick start
 
-## Scope
-
-- `README.md` is the private maintainer landing page for the canonical dev repo.
-- `README.public.md` is the consumer-facing source that publishes as `README.md`.
-- Do not add agent-only trigger text or hidden instructions to either README.
-- Do not paste long sections from `docs/internal/project-spec.md` into a README; link to the authoritative source instead.
+Read the current README and the docs it links to before editing. Keep the README
+as the first useful page for its audience: explain what the project is, how to
+start, where to get help, and where deeper docs live.
 
 ## Workflow
 
-1. Read both README files before editing either one.
-2. Check whether the change affects the public mirror. If yes, update `README.public.md` with consumer-safe wording.
-3. Keep `README.md` aligned with the private repo model, maintainer commands, internal docs map, and public stub links.
-4. Keep `README.public.md` free of private-only paths such as `AGENTS.md`, `CONTEXT.md`, `.agents/`, `.claude/`, `.cursor/`, `docs/agents/`, and `docs/internal/`.
-5. Run `pytest -q tests/test_docs_contracts.py` after editing either README.
+1. Identify the README's audience: public users, private maintainers, package
+   consumers, or contributors.
+2. Read linked install, usage, support, status, contribution, and license docs
+   before changing summaries.
+3. Keep examples copyable and small; include expected output when it clarifies
+   usage.
+4. Link to deeper docs instead of duplicating long specs.
+5. Remove stale links, obsolete requirements, and hidden agent-only trigger
+   text.
+6. Run the repo's README or docs validation if one exists.
 
 ## Checklist
 
-- Identity: project name plus a short plain-language description of audience and problem solved.
-- Requirements/install/config: Python 3.13+, install commands, `.env`, `.env.example`, and cache path summary.
-- Quick start: copy-pastable CLI examples including dry-run, apply, and common flags.
-- Documentation map: private README links to spec, runbook, and module specs; public README links only to published docs.
-- Changelog links: private README distinguishes internal `CHANGELOG.md` from public `CHANGELOG.public.md`; public README points readers at the published changelog path.
-- License: keep MIT license references accurate.
+- Name and description: self-explaining project name plus a specific statement
+  of what the project does.
+- Requirements and installation: exact prerequisites, package manager commands,
+  environment variables, and platform limits when relevant.
+- Usage: minimal working examples before advanced workflows.
+- Support: where readers should ask questions or report issues.
+- Contributing: whether contributions are accepted and how to start.
+- Status: deprecation, maintenance, or not-for-general-release notes when
+  relevant.
+- Documentation links: user-facing or team-facing docs that belong outside the
+  README.
+- License: accurate license name and link.
 
-## Validation
+## Standards
 
-The authoritative gate is `tests/test_docs_contracts.py`. If this skill and the test disagree, update the skill or test in the same change so the contract stays single-source.
+- Follow Make a README:
+  <https://www.makeareadme.com/>
+- Follow Google's README guidance:
+  <https://google.github.io/styleguide/docguide/READMEs.html>
+- For private/public audience sanitation, use `publish-boundary`.
