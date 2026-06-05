@@ -53,3 +53,5 @@ Source these rules **ambiently** — from what you already know about this repo 
 
 - Do not write changelog entries — that is the `changelog` skill's job.
 - Do not install git hooks or bind a repo — that is the `setup-standards` skill's job.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

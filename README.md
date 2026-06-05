@@ -20,10 +20,19 @@ behavior or path changes.
 
 One-line capability blurbs come from the first sentence of each pack's YAML `description:` in `SKILL.md`.
 
+### Commit standards
+
+* **commit-standards** - Author and validate git commit messages against Conventional Commits, layering any repo-local rules on top.
+* **setup-standards** - Bind a repository to the commit-standards skill by writing an invoke-before-commit pointer into the repo's agent-read source-of-truth doc (AGENTS.md, CLAUDE.md, etc.).
+
 ### Documentation maintenance
 
 * **changelog** - Maintains changelog documents using Keep a Changelog 1.1.0 and Semantic Versioning.
 * **readme** - Maintains README documents using Make a README and Google README guidance for clear project identity, setup, usage, support, status, documentation links, and license coverage.
+
+### Repo hygiene
+
+* **publish-boundary** - Reviews private source-of-truth repos and their generated public repos for sanitation, audience separation, whitelist drift, and pre-push safety.
 
 ## License
 

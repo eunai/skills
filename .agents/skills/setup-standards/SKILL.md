@@ -39,3 +39,5 @@ This skill writes a **pointer only**. It does not capture repo-local commit rule
 - Do not write individual commit messages — that is `commit-standards`.
 - Do not fan the pointer into multiple docs; write one canonical home and re-run for another.
 - Do not install git hooks or capture overlay rules — out of scope for this skill.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

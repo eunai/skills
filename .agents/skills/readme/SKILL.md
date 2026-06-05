@@ -46,3 +46,5 @@ start, where to get help, and where deeper docs live.
 - Follow Google's README guidance:
   <https://google.github.io/styleguide/docguide/READMEs.html>
 - For private/public audience sanitation, use `publish-boundary`.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

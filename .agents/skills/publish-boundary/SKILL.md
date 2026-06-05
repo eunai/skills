@@ -52,3 +52,5 @@ when possible, and run the repo's publish dry run before any public push.
   documentation map standards.
 - Use `changelog` for Keep a Changelog and Semantic Versioning release-note
   standards.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._

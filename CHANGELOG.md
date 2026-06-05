@@ -13,6 +13,8 @@ No unreleased changes yet.
 
 ### Added
 
+- Public catalog entries for the `commit-standards`, `setup-standards`, and
+  `publish-boundary` skills.
 - Public catalog entries for the `readme` and `changelog` documentation
   maintenance skills.
 - Public Semantic Versioning guidance for the published pack collection.

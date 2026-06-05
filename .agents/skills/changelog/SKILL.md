@@ -43,3 +43,5 @@ the release version choice.
 - Follow Semantic Versioning 2.0.0:
   <https://semver.org/spec/v2.0.0.html>
 - For private/public audience sanitation, use `publish-boundary`.
+
+_Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._
