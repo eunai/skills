@@ -1,4 +1,4 @@
-<!-- This file mirrors selected content from the private README/CHANGELOG. Edit-source-of-truth lives in the private repo's README.md / CHANGELOG.md unless this stub diverges intentionally. -->
+<!-- This file mirrors selected public content from the private changelog. Edit the private repo first unless this public stub intentionally diverges. -->
 
 # Changelog
 
@@ -11,17 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **revise-prompt** skill: restructure drafts into agent-readable prompts (copy-paste fence + change summary); whitelisted for the public mirror.
-- Initial public mirror of Cursor agent skills.
-- Public README: Quick start (`/setup-eunai-skills` + manual fallback), grouped **Reference** catalog, Acknowledgements, and Changelog pointer.
+- Public catalog entries for the `readme` and `changelog` documentation
+  maintenance skills.
 
 ### Changed
 
-- **revise-prompt**: grill-first vs immediate-revise decision; six-part prompt
-  scaffold and optional sections; reply format includes an optional one-line Y/N
-  to continue with the revised prompt.
-- **project-status-slice-report**: roadmap Mermaid diagrams follow a fixed
-  `flowchart LR` house style (node shapes, status classes, colors, edge layout);
-  `project_status.md` template fences no longer nest invalid Markdown blocks.
-  Edge source lines cap at four `-->` arrows with bridge-node continuations for
-  long spines (including long `:::done` or cancelled-label runs).
+- Updated the public mirror contract to publish `.agents/skills/` packs instead
+  of the previous Cursor-specific skill portfolio.
+
+### Removed
+
+- Removed the legacy project-status and slice-report skill catalog references.
