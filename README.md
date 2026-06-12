@@ -1,5 +1,7 @@
 # Agent skills
 
+![status: in development](https://img.shields.io/badge/status-in%20development-yellow) ![visibility: public](https://img.shields.io/badge/visibility-public-brightgreen) ![version: 0.1.0](https://img.shields.io/badge/version-0.1.0-blue)
+
 A small collection of agent skills for documentation maintenance and repo hygiene. Each pack lives under `.agents/skills/<name>/` with a `SKILL.md`. MIT licensed.
 
 ## Quick start
@@ -28,6 +30,7 @@ One-line capability blurbs come from the first sentence of each pack's YAML `des
 ### Documentation maintenance
 
 * **changelog** - Maintains changelog documents using Keep a Changelog 1.1.0 and Semantic Versioning.
+* **maintain-badges** - Maintains manually updated static Shields.io badges and their repository rules using authoritative local evidence.
 * **readme** - Maintains README documents using Make a README and Google README guidance for clear project identity, setup, usage, support, status, documentation links, and license coverage.
 
 ### Repo hygiene

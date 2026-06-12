@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added the `maintain-badges` skill for evidence-backed static Shields.io badge
+  maintenance and repository-specific badge rules.
+- Added status, visibility, and released-version badges to the public README.
+
 ### Changed
 
 - Expanded `setup-standards` so users can choose commit, README, changelog, or
