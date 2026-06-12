@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No unreleased changes yet.
+### Changed
+
+- Expanded `setup-standards` so users can choose commit, README, changelog, or
+  all standards before binding the selected guidance to a repository.
 
 ## [0.1.0] - 2026-06-05
 

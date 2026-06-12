@@ -23,7 +23,7 @@ One-line capability blurbs come from the first sentence of each pack's YAML `des
 ### Commit standards
 
 * **commit-standards** - Author and validate git commit messages against Conventional Commits, layering any repo-local rules on top.
-* **setup-standards** - Bind a repository to the commit-standards skill by writing an invoke-before-commit pointer into the repo's agent-read source-of-truth doc (AGENTS.md, CLAUDE.md, etc.).
+* **setup-standards** - Binds a repository to selected commit, README, and changelog standards by writing invoke-before-work pointers into the repo's agent-read source-of-truth doc.
 
 ### Documentation maintenance
 

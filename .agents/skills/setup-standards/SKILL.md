@@ -1,43 +1,81 @@
 ---
 name: setup-standards
-description: Bind a repository to the commit-standards skill by writing an invoke-before-commit pointer into the repo's agent-read source-of-truth doc (AGENTS.md, CLAUDE.md, etc.). Use when the user wants to set up, install, or enforce commit message standards in a repo, or invokes /setup-standards. Not for writing individual commit messages (use commit-standards).
+description: Binds a repository to selected commit, README, and changelog standards by writing invoke-before-work pointers into the repo's agent-read source-of-truth doc. Use when the user wants to set up or enforce repository standards, or invokes /setup-standards.
 ---
 
 # Setup Standards
 
-Bind the current repository to the `commit-standards` skill: write a pointer into the repo's source-of-truth doc so any agent or human about to commit is told to invoke `commit-standards` first. One-time, per-repo setup.
+Bind the current repository to one or more standards packs. Write concise
+pointers into one source-of-truth doc so agents invoke the relevant skill before
+committing or editing documentation.
 
-This skill writes a **pointer only**. It does not capture repo-local commit rules and does not install git hooks — `commit-standards` enforces softly, and hard hooks are out of scope.
+This skill writes pointers only. It does not copy the standards into the target
+repo or install git hooks.
 
 ## Workflow
 
-1. **Scan** the repo for candidate source-of-truth docs, in priority order:
+1. **Choose standards first.** Before scanning or editing, present this
+   plain-text menu and wait for the user's selection:
+
+   ```text
+   Which standards do you want to add?
+   (a) Commit message standards
+   (b) README standards
+   (c) Changelog standards
+   (d) All standards
+   ```
+
+   Accept `a`, `b`, `c`, or `d`. Do not infer a selection or use a UI question
+   tool.
+
+2. **Scan** the repo for candidate source-of-truth docs, in priority order:
    1. `AGENTS.md`
    2. `CLAUDE.md`
    3. `.github/copilot-instructions.md`, `.cursor/rules/*`
    4. `CONTRIBUTING.md`
    5. `.gitmessage`
 
-   Agent-read files outrank human-read files — the pointer's main audience is agents that will not invoke the skill on their own.
+   Agent-read files outrank human-read files because agents are the primary
+   audience.
 
-2. **Present** what you found as **plain text** (never `AskUserQuestion`): list the candidates that exist, **highlight the recommended one** (the highest-priority agent-read file present) with a one-line reason, and let the user pick or redirect. If none exist, recommend creating `AGENTS.md`.
+3. **Choose the target.** In plain text, list existing candidates, mark the
+   highest-priority agent-read file as recommended with a one-line reason, and
+   wait for the user to choose or redirect. If none exist, recommend creating
+   `AGENTS.md`.
 
-3. **Write** the pointer into the single chosen doc, formatted for that doc's type — a `## Commit messages` markdown section for `.md` files, or `#`-prefixed comment lines for `.gitmessage`:
+4. **Write** only the selected pointers into the single chosen doc. For
+   Markdown files, use these sections:
 
-   > ## Commit messages
-   >
-   > Before running `git commit`, invoke the `commit-standards` skill to author or validate the message against Conventional Commits, plus any commit rules stated in this file. Do this for every commit.
+   ```markdown
+   ## Commit messages
 
-4. **Upsert — never duplicate:**
-   - No existing pointer → insert the section.
-   - Pointer present and current → no-op; report "already bound."
-   - Pointer present but stale → update it in place.
-   - A *different*, non-ours commit instruction already exists → surface it in plain text and let the user choose **replace / keep both / leave it**.
+   Before running `git commit`, invoke the `commit-standards` skill to author or validate the message against Conventional Commits, plus any commit rules stated in this file. Do this for every commit.
+
+   ## README maintenance
+
+   Before editing a README, invoke the `readme` skill and follow any README rules stated in this file.
+
+   ## Changelog maintenance
+
+   Before editing a changelog or release notes, invoke the `changelog` skill and follow any changelog rules stated in this file.
+   ```
+
+   For `.gitmessage`, write the selected text as `#`-prefixed comments.
+
+5. **Upsert each selected pointer; never duplicate.**
+   - Insert a missing pointer.
+   - Leave a current pointer unchanged and report it as already bound.
+   - Update a stale pointer in place.
+   - Leave unselected standards unchanged.
+   - If a different instruction conflicts with a selected pointer, show it in
+     plain text and let the user choose `replace`, `keep both`, or `leave it`.
 
 ## Do not
 
-- Do not write individual commit messages — that is `commit-standards`.
-- Do not fan the pointer into multiple docs; write one canonical home and re-run for another.
-- Do not install git hooks or capture overlay rules — out of scope for this skill.
+- Do not write individual commit messages; use `commit-standards`.
+- Do not edit README or changelog content; use `readme` or `changelog`.
+- Do not fan pointers into multiple docs; write one canonical home and re-run
+  for another.
+- Do not install hooks or copy full standards into the target doc.
 
 _Source: [eunai/skills](https://github.com/eunai/skills) (MIT)._
